@@ -22,11 +22,15 @@ function showSuccess(input){
 }
 
 //Check email is valid 
-function isValidEmail(email){
+function checkEmail(input){
 
     //StackOverFlow
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());  
+    if(re.test(input.value.trim())){
+        showSuccess(input);
+    }else {
+        showError(input, `Email jest niepoprawny!`)
+    }
 }
 
 //Check required fields 
@@ -40,10 +44,32 @@ function checkRequired(inputArr){
     });
 }
 
+//Check input length 
+function checkLength(input , min , max){
+    if(input.value.length < min){
+        showError(input, `Wymagane minimum ${min} liter(y)`)
+    }else if(input.value.length > max){
+        showError(input , `Wymagane max ${max} liter`)
+    }else {
+        showSuccess(input)
+    }
+}
+
+//check passwords match
+function checkPasswordMatch(input1 , input2){
+    if(input1.value !== input2.value){
+        showError(input2, 'Hasła się nie zgadzają!')
+    }
+}
+
 //Event listeners
 form.addEventListener('submit' , function(e) {
     e.preventDefault();
 
     checkRequired([username, email, password, password2]);
+    checkLength(username, 3 ,15);
+    checkLength(password , 6, 25);
+    checkEmail(email);
+    checkPasswordMatch(password , password2)
 })
 
